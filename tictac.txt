@@ -1,0 +1,238 @@
+// Click Run, then click anywhere in the console to Play
+using System;
+
+namespace OwnTicTacToe
+{
+    public class Program
+    {
+        public static char[] gameBoard = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        public static bool endGame = false;
+        public static int turns = 0;
+
+
+        public static void Main(string[] args)
+        {
+            Console.WriteLine(
+                "     |     |     " + Environment.NewLine +
+                "  {0}  |  {1}  |  {2}  " + Environment.NewLine +
+                "_____|_____|_____" + Environment.NewLine +
+                "     |     |     " + Environment.NewLine +
+                "  {3}  |  {4}  |  {5}  " + Environment.NewLine +
+                "_____|_____|_____" + Environment.NewLine +
+                "     |     |     " + Environment.NewLine +
+                "  {6}  |  {7}  |  {8}  " + Environment.NewLine +
+                "     |     |     ",
+                gameBoard[0], gameBoard[1], gameBoard[2], gameBoard[3], gameBoard[4], gameBoard[5], gameBoard[6],
+                gameBoard[7], gameBoard[8]
+                );
+
+            Console.WriteLine("Hello, to my first basic game :)" + Environment.NewLine +
+               "Please have two people ready. Press any key to begin.");
+
+            do
+            {
+                Choices(Console.ReadLine());
+                Console.WriteLine("Would you like to reset the game?");
+                Console.WriteLine("Press y or n");
+                GameReset(Console.ReadLine());
+
+            } while (!endGame);
+        }
+
+
+        public static void Board()
+        {
+            Console.WriteLine(
+                "     |     |     " + Environment.NewLine +
+                "  {0}  |  {1}  |  {2}  " + Environment.NewLine +
+                "_____|_____|_____" + Environment.NewLine +
+                "     |     |     " + Environment.NewLine +
+                "  {3}  |  {4}  |  {5}  " + Environment.NewLine +
+                "_____|_____|_____" + Environment.NewLine +
+                "     |     |     " + Environment.NewLine +
+                "  {6}  |  {7}  |  {8}  " + Environment.NewLine +
+                "     |     |     ",
+                gameBoard[0], gameBoard[1], gameBoard[2], gameBoard[3], gameBoard[4], gameBoard[5], gameBoard[6],
+                gameBoard[7], gameBoard[8]
+                );
+        }
+
+
+        public static void Choices(string input)
+        {
+            
+            int players = 3;
+            int selection;
+            bool keepLoop = false;
+            
+            do
+            {
+                // Player Choices & Turns
+                #region
+                if (players % 2 == 1)
+                {
+                    do
+                    {
+                        Console.WriteLine("Player 1 make your selection.");
+                        bool good = Int32.TryParse(Console.ReadLine(), out selection);
+                        bool goodValue = selection < 10 && selection > 0;
+                        
+                        
+                        for (int i = 0; i < gameBoard.Length; i++)
+                        {
+                            bool ready = gameBoard[i] != 'X' && gameBoard[i] != 'O';
+                             
+                                if (good && goodValue && ready && (selection.ToString() == gameBoard[i].ToString()))
+                                {
+                                    gameBoard[i] = 'X';
+                                    keepLoop = false;
+                                    turns++;
+                                    Console.Clear();
+                                    Board();
+                                    break;
+                                }
+                                else if ((selection.ToString() != gameBoard[i].ToString()) && goodValue)
+                                {
+                                    Console.Clear();
+                                    Board();
+                                    Console.WriteLine("Pick an empty space");
+                                    keepLoop = true;
+                                    
+                                }else if (!good || !goodValue)
+                                {
+                                    Console.Clear();
+                                    Board();
+                                    Console.WriteLine("Pick a correct value.");
+                                    keepLoop = true;
+                                    
+                                }
+                        }
+                    } while (keepLoop);
+                    
+                    players++;
+                }
+                else
+                {
+                    do
+                    {
+                        Console.WriteLine("Player 2 make your selection.");
+                        bool good = Int32.TryParse(Console.ReadLine(), out selection);
+                        bool goodValue = selection < 10 && selection > 0;
+
+
+                        for (int i = 0; i < gameBoard.Length; i++)
+                        {
+                            bool ready = gameBoard[i] != 'X' && gameBoard[i] != 'O';
+                            
+                                if (good && goodValue && ready && selection.ToString() == gameBoard[i].ToString())
+                                {
+                                    gameBoard[i] = 'O';
+                                    keepLoop = false;
+                                    turns++;
+                                    Console.Clear();
+                                    Board();
+                                    break;
+                                }
+                                else if (selection.ToString() != gameBoard[i].ToString() && goodValue)
+                                {
+                                    Console.Clear();
+                                    Board();
+                                    Console.WriteLine("Pick an empty space");
+                                    keepLoop = true;
+                                    
+                                }
+                                else if (!good || !goodValue)
+                                {
+                                    Console.Clear();
+                                    Board();
+                                    Console.WriteLine("Pick a correct value.");
+                                    keepLoop = true;               
+                                }
+                        }
+                    } while (keepLoop);
+
+                    players--;
+                }
+                #endregion
+
+                // Check Winning Conditions
+                #region
+                if(
+                    (gameBoard[0] == 'X' && gameBoard[1] == 'X' && gameBoard[2] == 'X') ||
+                    (gameBoard[3] == 'X' && gameBoard[4] == 'X' && gameBoard[5] == 'X') ||
+                    (gameBoard[6] == 'X' && gameBoard[7] == 'X' && gameBoard[8] == 'X') ||
+                    (gameBoard[0] == 'X' && gameBoard[3] == 'X' && gameBoard[6] == 'X') ||
+                    (gameBoard[1] == 'X' && gameBoard[4] == 'X' && gameBoard[7] == 'X') ||
+                    (gameBoard[2] == 'X' && gameBoard[5] == 'X' && gameBoard[8] == 'X') ||
+                    (gameBoard[0] == 'X' && gameBoard[4] == 'X' && gameBoard[8] == 'X') ||
+                    (gameBoard[2] == 'X' && gameBoard[4] == 'X' && gameBoard[6] == 'X'))
+                {
+                    Console.WriteLine("Congrats, Player 1 has won!");
+                    endGame = true;
+                }else if (
+                    (gameBoard[0] == 'O' && gameBoard[1] == 'O' && gameBoard[2] == 'O') ||
+                    (gameBoard[3] == 'O' && gameBoard[4] == 'O' && gameBoard[5] == 'O') ||
+                    (gameBoard[6] == 'O' && gameBoard[7] == 'O' && gameBoard[8] == 'O') ||
+                    (gameBoard[0] == 'O' && gameBoard[3] == 'O' && gameBoard[6] == 'O') ||
+                    (gameBoard[1] == 'O' && gameBoard[4] == 'O' && gameBoard[7] == 'O') ||
+                    (gameBoard[2] == 'O' && gameBoard[5] == 'O' && gameBoard[8] == 'O') ||
+                    (gameBoard[0] == 'O' && gameBoard[4] == 'O' && gameBoard[8] == 'O') ||
+                    (gameBoard[2] == 'O' && gameBoard[4] == 'O' && gameBoard[6] == 'O'))
+                {
+                    Console.WriteLine("Congrats, Player 2 has won!");
+                    endGame = true;
+                }
+                else if(turns == 9)
+                {
+                    Console.WriteLine("Draw!");
+                    endGame = true;          
+                }
+                #endregion
+            } while (!endGame);
+        }
+
+        // Reset the Board
+        public static void GameReset(string input)
+        {
+            bool goodInput = input == "y" || input == "n";
+            int lol = 50;
+
+            do
+            {
+                if (input == "y")
+                {
+                    Console.Clear();
+                    gameBoard[0] = '1';
+                    gameBoard[1] = '2';
+                    gameBoard[2] = '3';
+                    gameBoard[3] = '4';
+                    gameBoard[4] = '5';
+                    gameBoard[5] = '6';
+                    gameBoard[6] = '7';
+                    gameBoard[7] = '8';
+                    gameBoard[8] = '9';
+                    turns = 0;
+
+                    Board();
+                    Console.WriteLine("Press any key to Begin!");
+
+                    endGame = false;
+                }
+                else if (input == "n")
+                {
+                    Console.Clear();
+                    while (lol > 0)
+                    {
+                        Console.WriteLine("Ok, Thank you for playing :). Huehuehue");
+                        lol--;
+                    }
+                }
+                else if (!goodInput)
+                {
+                    Console.WriteLine("Type the correct input please.");
+                    input = Console.ReadLine();
+                }
+            } while (!goodInput);
+        }
+    }
+}
